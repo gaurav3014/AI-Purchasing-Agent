@@ -1,0 +1,56 @@
+[
+  {
+    "case": "genuine shortfall, alternate supplier available",
+    "po_id": "PO-8001",
+    "sku": "SKU-008",
+    "shortfall": 250,
+    "decision": "additional_po",
+    "confidence": 0.75,
+    "requires_human_approval": true,
+    "checks": {
+      "gathered_required_evidence": true,
+      "decision_as_expected": true,
+      "action_expectation_met": true,
+      "validation_passed": true,
+      "no_unjustified_policy_override": true
+    },
+    "passed": true,
+    "reasoning": "The shortfall on PO-8001 leaves a 290-unit gap against demand. Proposing a new order for 300 units from SUP-12 (8-day lead time), chosen over the original supplier for faster/available fulfillment."
+  },
+  {
+    "case": "shortfall doesn't matter, coverage already sufficient",
+    "po_id": "EVAL-PO-A",
+    "sku": "EVAL-SKU-A",
+    "shortfall": 100,
+    "decision": "accept_shortfall",
+    "confidence": 0.8,
+    "requires_human_approval": false,
+    "checks": {
+      "gathered_required_evidence": true,
+      "decision_as_expected": true,
+      "action_expectation_met": true,
+      "validation_passed": true,
+      "no_unjustified_policy_override": true
+    },
+    "passed": true,
+    "reasoning": "Even after the supplier's shortfall on EVAL-PO-A (confirmed 100 of 200), on-hand inventory (500) plus all confirmed incoming (100) still covers projected 300-unit demand. No further sourcing action is needed."
+  },
+  {
+    "case": "genuine gap, no alternate supplier -> escalate",
+    "po_id": "EVAL-PO-B",
+    "sku": "EVAL-SKU-B",
+    "shortfall": 100,
+    "decision": "escalate",
+    "confidence": 0.4,
+    "requires_human_approval": true,
+    "checks": {
+      "gathered_required_evidence": true,
+      "decision_as_expected": true,
+      "action_expectation_met": true,
+      "validation_correctly_failed_and_escalated": true,
+      "no_unjustified_policy_override": true
+    },
+    "passed": true,
+    "reasoning": "A gap of 140 units remains after the shortfall, but no alternate supplier is on file for EVAL-SKU-B. Needs buyer input on how to source the remainder."
+  }
+]

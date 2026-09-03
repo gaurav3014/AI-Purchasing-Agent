@@ -1,0 +1,53 @@
+[
+  {
+    "case": "genuine spike, existing plan insufficient",
+    "forecast_id": 14,
+    "sku": "SKU-014",
+    "decision": "increase_order",
+    "confidence": 0.75,
+    "requires_human_approval": true,
+    "checks": {
+      "gathered_required_evidence": true,
+      "decision_as_expected": true,
+      "action_expectation_met": true,
+      "validation_passed": true,
+      "no_unjustified_policy_override": true
+    },
+    "passed": true,
+    "reasoning": "Demand has spiked to 25.0/day (vs 10.0/day planned), so the existing purchase order is no longer sufficient. Proposing a supplementary order for 450.0 units (rounded to MOQ of 150) to close the 450-unit gap."
+  },
+  {
+    "case": "spike absorbed by existing plan",
+    "forecast_id": 15,
+    "sku": "EVAL-SKU-C",
+    "decision": "plan_sufficient",
+    "confidence": 0.8,
+    "requires_human_approval": false,
+    "checks": {
+      "gathered_required_evidence": true,
+      "decision_as_expected": true,
+      "action_expectation_met": true,
+      "validation_passed": true,
+      "no_unjustified_policy_override": true
+    },
+    "passed": true,
+    "reasoning": "Even at the accelerated pace (15.0/day vs 10.0/day planned), on-hand inventory (210) plus the existing open purchase order (250) still covers projected demand (450.0). The purchasing plan does not need to change."
+  },
+  {
+    "case": "genuine gap, budget too tight -> escalate",
+    "forecast_id": 16,
+    "sku": "EVAL-SKU-D",
+    "decision": "escalate",
+    "confidence": 0.4,
+    "requires_human_approval": true,
+    "checks": {
+      "gathered_required_evidence": true,
+      "decision_as_expected": true,
+      "action_expectation_met": true,
+      "validation_correctly_failed_and_escalated": true,
+      "no_unjustified_policy_override": true
+    },
+    "passed": true,
+    "reasoning": "Demand has spiked to 15.0/day (vs 6.7/day planned), leaving a 340-unit gap against the existing plan. Closing it would need about 340.0 more units, but that would exceed available budget or storage. Needs buyer input on trade-offs."
+  }
+]
