@@ -81,3 +81,49 @@ class PurchasingDecision(dspy.Signature):
              "(sku, warehouse_id, supplier_id, qty for propose_purchase_order; reason, context for "
              "escalate_to_human), or {} if action_tool is 'none'."
     )
+
+
+class ProductTriage(dspy.Signature):
+    """You are triaging one product's real data to decide whether it needs a
+    human/agent to look at it, as part of a daily sweep across the entire
+    catalog. Most products are healthy and should be left alone -- only flag
+    a genuine problem, not routine day-to-day variance.
+
+    Classify into exactly one of three problem types when a real issue
+    exists:
+    - "recommendation_needed": current inventory plus confirmed incoming
+      supply doesn't reasonably match projected demand (too little risks a
+      stockout, too much wastes storage/budget), and this isn't better
+      explained by one of the two categories below.
+    - "supplier_shortfall": an open purchase order exists where the supplier
+      has confirmed fewer units than were ordered.
+    - "demand_spike": actual sales are running meaningfully ahead of the
+      original forecast's pace, AND there is an existing open purchase order
+      whose confirmed quantity may no longer be enough at the new pace.
+
+    If nothing here rises to a genuine concern, set has_problem to false and
+    problem_type to "none". Be conservative -- a product a bit above or below
+    "ideal" coverage is normal, not a problem; only flag it if a careful
+    human buyer would actually want to look into it.
+    """
+
+    sku: str = dspy.InputField(desc="the SKU being reviewed")
+    product_name: str = dspy.InputField()
+    inventory: str = dspy.InputField(desc="JSON: on-hand quantity and safety stock target")
+    demand_forecast: str = dspy.InputField(
+        desc="JSON: originally forecast quantity, actual sales to date, days elapsed, "
+             "implied daily run-rate, and projected total demand if that pace continues"
+    )
+    open_purchase_orders: str = dspy.InputField(
+        desc="JSON: every open PO for this product -- ordered quantity vs confirmed quantity"
+    )
+
+    has_problem: bool = dspy.OutputField(desc="true only if this genuinely needs a look, false if healthy")
+    problem_type: Literal[
+        "recommendation_needed", "supplier_shortfall", "demand_spike", "none",
+    ] = dspy.OutputField(desc="one of the three categories above, or 'none' if has_problem is false")
+    reasoning: str = dspy.OutputField(desc="why you classified it this way, citing the specific numbers")
+    suggested_qty: int = dspy.OutputField(
+        desc="only for 'recommendation_needed': a rough estimate of additional units needed "
+             "(the full review will recompute the exact number); 0 for any other problem_type"
+    )

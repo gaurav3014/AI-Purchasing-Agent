@@ -8,11 +8,12 @@ services/scenario1.py and scenario2.py's shape exactly:
 
 The trigger is a DemandForecast row where actual sales imply a genuine
 spike against an existing open PO that may no longer cover it --
-`review_status` flips to "pending" by app/services/scanner.py's
-scan_for_demand_spikes, mirroring purchase_recommendations/shortfall_status
-for the other two scenarios. Same Proposal Pattern applies: a decision to
-increase the order still waits for human approval before
-api/orchestrator.py's apply_approval_decision() executes it.
+`review_status` flips to "pending" when app/services/scanner.py's daily AI
+triage (agent/triage.py) classifies a product this way, mirroring
+purchase_recommendations/shortfall_status for the other two scenarios. Same
+Proposal Pattern applies: a decision to increase the order still waits for
+human approval before api/orchestrator.py's apply_approval_decision()
+executes it.
 """
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session

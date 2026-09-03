@@ -119,7 +119,7 @@ SKU-014 "Party Balloons 50pk", warehouse WH-014 -- no spike flag set yet.
   the planned pace) -- a genuine spike. On-hand (100) + the existing PO
   (200) = 300 units of coverage, but at the new pace demand projects to
   ~750 -- the existing plan is no longer sufficient. review_status is left
-  at its default "none" -- only the scan (scan_for_demand_spikes) should
+  at its default "none" -- only the daily AI triage (agent/triage.py) should
   notice the accelerated run-rate against the existing PO and flag it.
 """
 from datetime import datetime, timedelta
