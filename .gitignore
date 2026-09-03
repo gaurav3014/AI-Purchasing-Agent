@@ -4,5 +4,6 @@ _pycache_/
 *.pyc
 *.db
 .env
+.venv
 backend/purchasing_agent.db
 eval/scenario1_report.json
