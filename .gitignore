@@ -1,0 +1,8 @@
+node_modules/
+dist/
+_pycache_/
+*.pyc
+*.db
+.env
+backend/purchasing_agent.db
+eval/scenario1_report.json
